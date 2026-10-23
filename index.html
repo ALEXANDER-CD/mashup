@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Grito & Mashup Visual | Jhon Cubillos</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&family=Reenie+Beanie&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Bebas Neue', 'sans-serif'],
+                        title: ['Syne', 'sans-serif'],
+                        body: ['Space Grotesk', 'sans-serif'],
+                        mono: ['Space Mono', 'monospace'],
+                        hand: ['Reenie Beanie', 'cursive'],
+                    },
+                    colors: {
+                        munch: {
+                            bg: '#e8ded1',       /* Lienzo claro / pergamino */
+                            dark: '#0a1128',     /* Azul noche profundo */
+                            card: '#ffffff',
+                            orange: '#d9481c',   /* Naranja rojizo del cielo */
+                            yellow: '#f2a900',   /* Amarillo atardecer */
+                            blue: '#1c3b57',     /* Azul del fiordo */
+                            red: '#9b1b1b',      /* Rojo sangre/angustia */
+                            border: '#111318'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Cuadrícula de libreta técnica */
+        .bg-grid {
+            background-size: 26px 26px;
+            background-image: 
+                linear-gradient(to right, rgba(10, 17, 40, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(10, 17, 40, 0.05) 1px, transparent 1px);
+        }
+
+        /* Sombras duras estilo brutalista */
+        .hard-shadow { box-shadow: 6px 6px 0px #0a1128; }
+        .hard-shadow-sm { box-shadow: 3px 3px 0px #0a1128; }
+        .hard-shadow-lg { box-shadow: 10px 10px 0px #0a1128; }
+        .hard-shadow-orange { box-shadow: 6px 6px 0px #d9481c; }
+        .hard-shadow-yellow { box-shadow: 6px 6px 0px #f2a900; }
+        .hard-shadow-red { box-shadow: 6px 6px 0px #9b1b1b; }
+
+        /* Manchas orgánicas (Blobs) */
+        .blob-1 {
+            border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+            animation: morph 10s ease-in-out infinite alternate;
+        }
+        .blob-2 {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            animation: morph 8s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes morph {
+            0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
+            50% { border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%; }
+            100% { border-radius: 30% 70% 40% 60% / 50% 30% 70% 50%; }
+        }
+
+        /* Pupila reactiva al cursor */
+        .iris-pupil {
+            transition: transform 0.05s ease-out;
+        }
+
+        /* Cinta adhesiva (Washi Tape) */
+        .tape {
+            background-color: rgba(242, 169, 0, 0.85);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            clip-path: polygon(3% 0%, 97% 0%, 100% 100%, 0% 100%);
+        }
+
+        /* Cursor seguidor personalizado */
+        .custom-cursor-dot {
+            pointer-events: none;
+            position: fixed;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, opacity 0.2s;
+        }
+    </style>
+</head>
+<body class="bg-munch-bg text-munch-dark font-body bg-grid selection:bg-munch-dark selection:text-munch-bg overflow-x-hidden relative">
+
+    <!-- Mini seguidor reactivo que acompaña al cursor -->
+    <div id="cursorFollower" class="custom-cursor-dot w-8 h-8 rounded-full border-2 border-munch-dark bg-munch-orange flex items-center justify-center font-bold text-[10px] text-white hard-shadow-sm opacity-0 md:opacity-90">
+        😱
+    </div>
+
+    <!-- Barra de Navegación -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-munch-bg/90 backdrop-blur-md border-b-2 border-munch-dark px-4 sm:px-8 py-3.5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="#" class="font-display text-3xl tracking-widest bg-munch-dark text-munch-bg px-3 py-0.5 border border-black hover:bg-munch-orange transition-colors">MUNCH</a>
+                <div class="hidden sm:block border-l-2 border-munch-dark pl-3">
+                    <p class="text-xs font-mono font-bold uppercase tracking-wider text-munch-dark leading-tight">Análisis Visual // 2026</p>
+                    <p class="text-[11px] text-zinc-600 font-mono">Reinterpretaciones de El Grito</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 sm:gap-5 text-xs font-bold uppercase tracking-wider">
+                <a href="#intro" class="hover:underline hidden lg:inline-block">Intro</a>
+                <a href="#analisis" class="hover:underline hidden md:inline-block">5 Casos</a>
+                <a href="#replica" class="hover:underline hidden lg:inline-block text-munch-orange">Réplica Digital</a>
+                <a href="#segundo-corte" class="hover:underline hidden lg:inline-block text-munch-blue">Segundo Corte</a>
+                <a href="#galeria" class="bg-munch-yellow text-black px-3.5 py-1.5 border-2 border-munch-dark hard-shadow-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all">
+                    Galería Visual
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION: Portada con Ojo Interactivo y Parallax -->
+    <header class="relative min-h-screen pt-28 pb-20 px-6 flex flex-col justify-center overflow-hidden">
+        
+        <!-- Mancha Cósmica con OJO INTERACTIVO #1 -->
+        <div class="absolute -top-12 -right-16 w-80 h-80 sm:w-[550px] sm:h-[550px] bg-gradient-to-br from-munch-orange to-munch-red text-munch-bg blob-1 p-8 flex items-center justify-center -z-10 opacity-90 overflow-hidden mix-blend-multiply">
+            <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:18px_18px] opacity-20"></div>
+            
+            <div class="interactive-eye relative w-40 h-40 sm:w-48 sm:h-48 rounded-full border-4 border-munch-dark flex items-center justify-center bg-munch-yellow shadow-2xl" data-max-dist="22">
+                <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-yellow-300 via-munch-orange to-munch-dark border-2 border-munch-dark flex items-center justify-center relative overflow-hidden">
+                    <div class="iris-pupil w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-munch-dark border-2 border-white/80 flex items-center justify-center shadow-2xl">
+                        <div class="w-3.5 h-3.5 rounded-full bg-white self-start ml-2 mt-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badges flotantes con efecto Parallax -->
+        <div class="parallax-badge absolute top-36 left-10 hidden xl:block bg-munch-yellow border-2 border-munch-dark p-2.5 hard-shadow-sm font-hand text-2xl -rotate-6" data-speed="2">
+            ¡ANGUSTIA EXISTENCIAL! ★
+        </div>
+        <div class="parallax-badge absolute bottom-24 right-20 hidden xl:block bg-munch-blue text-white border-2 border-munch-dark p-2.5 hard-shadow-sm font-mono text-xs font-bold rotate-6" data-speed="-1.5">
+            // EXPRESIONISMO 1893
+        </div>
+
+        <div class="max-w-7xl mx-auto w-full relative">
+            
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-white border-2 border-munch-dark font-mono font-bold text-xs uppercase hard-shadow-sm mb-6 -rotate-1">
+                <span class="w-2.5 h-2.5 rounded-full bg-munch-red animate-pulse"></span>
+                Investigaciones de Reinterpretaciones
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-8 space-y-6">
+                    <h1 class="font-display text-5xl sm:text-7xl lg:text-8.5xl xl:text-9xl leading-[0.88] tracking-tight text-munch-dark drop-shadow-md">
+                        EL GRITO:<br>
+                        <span class="text-munch-orange underline decoration-munch-dark decoration-4">METAMORFOSIS</span> EN LA CULTURA ACTUAL
+                    </h1>
+
+                    <p class="font-title text-xl sm:text-2xl text-zinc-800 max-w-2xl font-semibold leading-relaxed">
+                        Análisis de cómo la obra maestra expresionista de Edvard Munch ha sido apropiada, transformada y dotada de nuevos significados.
+                    </p>
+
+                    <!-- Ficha Técnica -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                        <div class="bg-white p-4 border-2 border-munch-dark hard-shadow-sm rotate-[-1deg] hover:rotate-0 transition-transform">
+                            <span class="text-xs font-mono uppercase text-zinc-500 block font-bold">Estudiante / Autor</span>
+                            <p class="text-sm sm:text-base font-bold text-zinc-900 mt-1">Jhon Cubillos</p>
+                        </div>
+                        <div class="bg-white p-4 border-2 border-munch-dark hard-shadow-sm rotate-[1deg] hover:rotate-0 transition-transform">
+                            <span class="text-xs font-mono uppercase text-zinc-500 block font-bold">Obra Original</span>
+                            <p class="text-sm sm:text-base font-bold text-zinc-900 mt-1">El Grito (Skrik) - 1893</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Callout Lateral Tipo Zine -->
+                <div class="lg:col-span-4 flex flex-col items-center lg:items-end">
+                    <div class="bg-munch-dark text-white p-6 border-2 border-black hard-shadow-lg rotate-2 max-w-sm relative group">
+                        <div class="tape absolute -top-3.5 left-12 w-28 h-6 rotate-[-4deg] z-10"></div>
+                        <div class="flex items-center justify-between pb-2 border-b border-zinc-700">
+                            <span class="font-mono text-xs text-munch-yellow uppercase font-bold">REFERENCIA ORIGINAL</span>
+                            <span class="text-xs font-mono">Óleo y pastel</span>
+                        </div>
+                        <div class="mt-4 aspect-[3/4] bg-zinc-800 border-2 border-zinc-600 flex items-center justify-center overflow-hidden relative">
+                            <!-- IMAGEN ORIGINAL -->
+                            <img src="media/fotos/EL GRITO.jpg" alt="El Grito Original" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60 group-hover:opacity-100">
+                            <span class="absolute text-xs font-mono text-zinc-300 text-center px-4 mix-blend-difference pointer-events-none"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- INTRODUCCIÓN -->
+    <section id="intro" class="py-20 px-6 border-t-2 border-munch-dark bg-white relative overflow-hidden">
+        
+        <!-- OJO INTERACTIVO #2 -->
+        <div class="absolute top-12 right-12 hidden lg:flex items-center gap-4 bg-zinc-50 border-2 border-munch-blue p-4 hard-shadow-sm z-20">
+            <div class="interactive-eye w-16 h-16 rounded-full border-2 border-munch-dark bg-munch-blue flex items-center justify-center relative overflow-hidden" data-max-dist="12">
+                <div class="w-12 h-12 rounded-full bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-white via-blue-200 to-munch-blue flex items-center justify-center border border-black">
+                    <div class="iris-pupil w-5 h-5 rounded-full bg-black flex items-center justify-center">
+                        <div class="w-1.5 h-1.5 rounded-full bg-white self-start ml-1 mt-1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-left font-mono text-xs">
+                <span class="text-munch-blue font-bold block uppercase">// La mirada del espectador</span>
+                <span class="text-zinc-500 text-[10px]">Evolución del ícono</span>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto space-y-16 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between border-b-2 border-munch-dark pb-6 gap-4">
+                <div>
+                    <span class="bg-munch-orange text-white font-mono text-xs uppercase px-2.5 py-1 border-2 border-munch-dark hard-shadow-sm inline-block font-bold">
+                        01. Contexto Actual
+                    </span>
+                    <h2 class="font-display text-4xl sm:text-6xl text-munch-dark mt-2">LA OBRA HOY EN DÍA</h2>
+                </div>
+                <div class="font-hand text-3xl text-zinc-600 -rotate-2">
+                    "De la crisis al meme colectivo"
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-12 bg-zinc-50 border-2 border-munch-dark p-6 sm:p-8 hard-shadow space-y-4 relative hover:border-munch-orange transition-colors duration-300">
+                    <div class="tape absolute -top-3 right-8 w-24 h-5 rotate-2"></div>
+                    <span class="font-hand text-3xl text-munch-orange block">¿Cómo ha sido reinterpretada o reutilizada esta obra hoy en día?</span>
+                    <p class="text-sm sm:text-base text-zinc-700 leading-relaxed font-body pt-2">
+                        "El Grito" ha trascendido el ámbito de las bellas artes para incrustarse profundamente en el imaginario popular contemporáneo. Su figura andrógina y su rostro distorsionado por la desesperación se han convertido en un molde universal para expresar cualquier forma de impacto, miedo o asombro. 
+                    </p>
+                    <p class="text-sm sm:text-base text-zinc-700 leading-relaxed font-body">
+                        Hoy en día, la obra aparece en <strong>publicidad</strong>, en el <strong>cine</strong> inspirando el diseño de máscaras de terror, en <strong>redes sociales y memes</strong> como reacción a problemas cotidianos o políticos, e incluso en nuestra comunicación digital diaria a través del famoso <strong>emoji de terror (😱)</strong>. Se ha despojado de su angustia clínica original para ser un lienzo en blanco de la expresión dramática colectiva.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ANÁLISIS DE LAS 5 REINTERPRETACIONES -->
+    <section id="analisis" class="py-20 px-6 border-t-2 border-munch-dark bg-munch-dark text-white relative">
+        <div class="max-w-7xl mx-auto space-y-16 relative z-10">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-zinc-700 pb-6 gap-4">
+                <div>
+                    <span class="bg-munch-yellow text-black font-mono text-xs uppercase px-2.5 py-1 border border-black font-bold">
+                        02. Análisis de Casos
+                    </span>
+                    <h2 class="font-display text-4xl sm:text-7xl text-white mt-2">5 REINTERPRETACIONES</h2>
+                </div>
+                <p class="text-zinc-400 text-sm font-mono max-w-sm">
+                    Estudio de cambios en estilo, técnica, contexto y la adquisición de nuevos significados en la cultura visual.
+                </p>
+            </div>
+
+            <div class="space-y-12">
+                <!-- REINTERPRETACIÓN 1 -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-zinc-900 border-2 border-zinc-700 p-6 sm:p-8 hard-shadow-sm hover:border-munch-orange hover:hard-shadow-orange transition-all duration-300 rotate-[-0.5deg]">
+                    <div class="lg:col-span-4 aspect-[4/5] bg-black border-2 border-zinc-600 relative overflow-hidden flex items-center justify-center group">
+                        <img src="media/fotos/scream 2.jpg" alt="Ghostface Scream" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity">
+                        <span class="absolute text-xs font-mono text-zinc-400 text-center px-4 pointer-events-none mix-blend-difference"></span>
+                    </div>
+                    <div class="lg:col-span-8 space-y-6">
+                        <h3 class="font-display text-4xl text-munch-orange uppercase">1. El Grito en el Cine de Terror (Ghostface)</h3>
+                        <div class="space-y-3">
+                            <span class="bg-black text-white text-xs font-mono px-2 py-0.5 uppercase font-bold inline-block border border-zinc-700">Cambios realizados</span>
+                            <ul class="list-disc pl-5 text-sm text-zinc-300 space-y-2 font-body leading-relaxed">
+                                <li><strong>Técnica y Estilo:</strong> Pasa de ser una pintura al óleo bidimensional a un objeto de diseño industrial (máscara de plástico y tela) monocromático.</li>
+                                <li><strong>Personajes y Contexto:</strong> El sujeto que sufre la crisis desaparece; el rostro es usado por un asesino (slasher) en la cultura pop de los 90.</li>
+                                <li><strong>Intención:</strong> Ya no muestra el pánico interno de quien grita, sino que busca <em>provocar</em> pánico en quien lo observa.</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-3 pt-4 border-t border-zinc-700">
+                            <span class="bg-munch-orange text-white text-xs font-mono px-2 py-0.5 uppercase font-bold inline-block border border-black">Nuevo significado</span>
+                            <p class="text-sm text-zinc-200 leading-relaxed font-body">
+                                La obra invierte su polaridad: de ser el símbolo de la <strong>víctima</strong> atormentada, se transforma en el símbolo del <strong>verdugo</strong>. La angustia se mercantiliza como terror comercial y la máscara vacía despoja al grito de su humanidad.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REINTERPRETACIÓN 2 -->
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-zinc-900 border-2 border-zinc-700 p-6 sm:p-8 hard-shadow-sm hover:border-munch-yellow hover:hard-shadow-yellow transition-all duration-300 rotate-[0.5deg]">
+    <div class="lg:col-span-4 aspect-[4/5] bg-black border-2 border-zinc-600 relative overflow-hidden flex items-center justify-center lg:order-last group">
+        <img src="media/fotos/Simpson.jpg" alt="Lisa Simpson" class="w-full h-full object-cover object-left opacity-60 group-hover:opacity-100 transition-opacity">
+    </div>
+    <div class="lg:col-span-8 space-y-6">
+        <h3 class="font-display text-4xl text-munch-yellow uppercase">2. La Parodia en la Animación (Los Simpson)</h3>
+        <div class="space-y-3">
+            <span class="bg-black text-white text-xs font-mono px-2 py-0.5 uppercase font-bold inline-block border border-zinc-700">Cambios realizados</span>
+            <ul class="list-disc pl-5 text-sm text-zinc-300 space-y-2 font-body leading-relaxed">
+                <li><strong>Personajes:</strong> El ente espectral es reemplazado por Lisa Simpson, ícono de la comedia televisiva.</li>
+                <li><strong>Estilo y Técnica:</strong> Se abandona el trazo expresionista por animación 2D con líneas duras y colores sólidos sin textura.</li>
+                <li><strong>Intención:</strong> El entorno se mantiene como referencia visual, pero la intención se vuelve puramente cómica y de consumo masivo.</li>
+            </ul>
+        </div>
+        <div class="space-y-3 pt-4 border-t border-zinc-700">
+            <span class="bg-munch-yellow text-black text-xs font-mono px-2 py-0.5 uppercase font-bold inline-block border border-black">Nuevo significado</span>
+            <p class="text-sm text-zinc-200 leading-relaxed font-body">
+                El terror metafísico se <strong>banaliza</strong>. El "grito" ya no responde a un ataque de pánico universal, sino que se asocia a las frustraciones cómicas del personaje. La obra de "alto arte" se desmitifica para ser consumida de forma accesible y humorística.
+            </p>
+        </div>
+    </div>
+</div>
+
+                <!-- REINTERPRETACIÓN 3 -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-zinc-900 border-2 border-zinc-700 p-6 sm:p-8 hard-shadow-sm hover:border-munch-blue hover:shadow-[6px_6px_0px_#1c3b57] transition-all duration-300 rotate-[-0.5deg]">
+                    <div class="lg:col-span-4 aspect-[4/5] bg-black border-2 border-zinc-600 relative overflow-hidden flex items-center justify-center group">
+                        <img src="media/fotos/emoji.jpg" alt="Cartel Activismo" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity">
+                        <span class="absolute text-xs font-mono text-zinc-400 text-center px-4 pointer-events-none mix-blend-difference"></span>
+                    </div>
+                    <div class="lg:col-span-8 space-y-6">
+                        <h3 class="font-display text-4xl text-blue-400 uppercase">3. Gráfica de Activismo (Crisis Climática / Social)</h3>
+                        <div class="space-y-3">
+                            <span class="bg-black text-white text-xs font-mono px-2 py-0.5 uppercase font-bold inline-block border border-zinc-700">Cambios realizados</span>
+                            <ul class="list-disc pl-5 text-sm text-zinc-300 space-y-2 font-body leading-relaxed">
+                                <li><strong>Personajes y Composición:</strong> El rostro es sustituido visualmente por el planeta Tierra derritiéndose, o lleva mascarillas médicas.</li>
+                                <li><strong>Época y Contexto:</strong> Se traslada al siglo XXI, en medio de la era de la ansiedad ecológica o crisis sanitaria global.</li>
+                                <li><strong>Intención:</strong> Deja de ser un relato psicológico individual para convertirse en propaganda gráfica y llamado de urgencia colectiva.</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-3 pt-4 border-t border-zinc-700">
+                            <span class="bg-blue-600 text-white text-xs font-mono px-2 py-0.5 uppercase font-bold inline-block border border-black">Nuevo significado</span>
+                            <p class="text-sm text-zinc-200 leading-relaxed font-body">
+                                La imagen recupera la angustia, pero cambia el sujeto: ya no es el humano temiendo a la naturaleza, sino <strong>la naturaleza misma gritando</strong>. El significado se colectiviza como símbolo de una crisis palpable y compartida.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REINTERPRETACIÓN 4 -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-zinc-900 border-2 border-zinc-700 p-6 sm:p-8 hard-shadow-sm hover:border-munch-red hover:hard-shadow-red transition-all duration-300 rotate-[0.5deg]">
+                    <div class="lg:col-span-4 aspect-[4/5] bg-black border-2 border-zinc-600 relative overflow-hidden flex items-center justify-center lg:order-last group">
+                        <img src="media/fotos/lobal.jpg" alt="Emoji de Grito" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity">
+                        <span class="absolute text-xs font-mono text-zinc-400 text-center px-4 pointer-events-none mix-blend-difference"></span>
+                    </div>
+                    <div class="lg:col-span-8 space-y-6">
+                        <h3 class="font-display text-4xl text-munch-red uppercase">4. El Lenguaje Digital (Emoji 😱)</h3>
+                        <div class="space-y-3">
+                            <span class="bg-black text-white text-xs font-mono px-2 py-0.5 uppercase font-bold inline-block border border-zinc-700">Cambios realizados</span>
+                            <ul class="list-disc pl-5 text-sm text-zinc-300 space-y-2 font-body leading-relaxed">
+                                <li><strong>Estilo y Técnica:</strong> Pasa del expresionismo pictórico al diseño de interfaz digital minimalista y vectorial (flat design o 3D simple).</li>
+                                <li><strong>Colores:</strong> Se estandariza al color amarillo institucional de los emojis, perdiendo la riqueza cromática del atardecer ensangrentado.</li>
+                                <li><strong>Contexto:</strong> Utilizado en la comunicación instantánea moderna (chats, redes sociales) en dispositivos móviles.</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-3 pt-4 border-t border-zinc-700">
+                            <span class="bg-munch-red text-white text-xs font-mono px-2 py-0.5 uppercase font-bold inline-block border border-black">Nuevo significado</span>
+                            <p class="text-sm text-zinc-200 leading-relaxed font-body">
+                                La expresión máxima del aislamiento se convierte en un <strong>atajo comunicativo universal</strong>. El "grito" pierde toda su carga existencial para ser usado como una reacción hiperbólica ante sorpresas cotidianas, chismes o pequeños sustos, demostrando cómo el arte se miniaturiza para el consumo rápido.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REINTERPRETACIÓN 5 -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-zinc-900 border-2 border-zinc-700 p-6 sm:p-8 hard-shadow-sm hover:border-zinc-300 hover:shadow-[6px_6px_0px_#d4d4d8] transition-all duration-300 rotate-[-0.5deg]">
+                    <div class="lg:col-span-4 aspect-[4/5] bg-black border-2 border-zinc-600 relative overflow-hidden flex items-center justify-center group">
+                        <img src="media/fotos/angelito.jpg" alt="Home Alone Macaulay Culkin" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity">
+                        <span class="absolute text-xs font-mono text-zinc-400 text-center px-4 pointer-events-none mix-blend-difference"></span>
+                    </div>
+                    <div class="lg:col-span-8 space-y-6">
+                        <h3 class="font-display text-4xl text-zinc-200 uppercase">5. El Cartel Cinematográfico (Mi Pobre Angelito)</h3>
+                        <div class="space-y-3">
+                            <span class="bg-black text-white text-xs font-mono px-2 py-0.5 uppercase font-bold inline-block border border-zinc-700">Cambios realizados</span>
+                            <ul class="list-disc pl-5 text-sm text-zinc-300 space-y-2 font-body leading-relaxed">
+                                <li><strong>Técnica y Personajes:</strong> Interpretado mediante fotografía real por el actor infantil Macaulay Culkin, reemplazando la figura cadavérica.</li>
+                                <li><strong>Composición:</strong> Mantiene la icónica pose de las manos comprimiendo las mejillas y la boca abierta, pero el fondo es un baño doméstico en lugar de un puente noruego.</li>
+                                <li><strong>Época e Intención:</strong> Contexto de Hollywood (1990). La intención es vender una comedia familiar, usando la estética del pánico como un recurso cómico visual.</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-3 pt-4 border-t border-zinc-700">
+                            <span class="bg-zinc-200 text-black text-xs font-mono px-2 py-0.5 uppercase font-bold inline-block border border-black">Nuevo significado</span>
+                            <p class="text-sm text-zinc-300 leading-relaxed font-body">
+                                El miedo a la vastedad del universo y la muerte se transforma en el <strong>pánico físico inmediato e infantil</strong> (provocado por la loción de afeitar). Esta reinterpretación demuestra que el gesto corporal capturado por Munch es tan fuerte que funciona perfectamente incluso cuando se descontextualiza hacia la comedia blanca familiar.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- NUEVA SECCIÓN: RÉPLICA DIGITAL -->
+    <section id="replica" class="py-20 px-6 border-t-2 border-munch-dark bg-white relative">
+        <div class="max-w-7xl mx-auto space-y-16">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between border-b-2 border-munch-dark pb-6 gap-4">
+                <div>
+                    <span class="bg-munch-red text-white font-mono text-xs uppercase px-2.5 py-1 border-2 border-munch-dark hard-shadow-sm inline-block font-bold">
+                        03. Proceso Creativo
+                    </span>
+                    <h2 class="font-display text-4xl sm:text-6xl text-munch-dark mt-2">RÉPLICA DIGITAL & ANÁLOGA</h2>
+                </div>
+                <div class="font-hand text-3xl text-zinc-600 -rotate-2 max-w-sm text-right">
+                    "Reproduciendo a Munch: Observación, Color y Textura"
+                </div>
+            </div>
+
+            <!-- Reseñas del Proceso -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Reseña Digital -->
+                <div class="bg-zinc-50 border-2 border-munch-dark p-6 sm:p-8 hard-shadow-sm relative group hover:border-munch-blue transition-colors">
+                    <div class="tape absolute -top-3 left-8 w-24 h-5 rotate-2"></div>
+                    <div class="flex items-center gap-3 mb-4 border-b border-zinc-200 pb-3">
+                        <i data-lucide="monitor" class="w-6 h-6 text-munch-blue"></i>
+                        <h3 class="font-title text-2xl font-bold text-zinc-900">Proceso Digital</h3>
+                    </div>
+                    <p class="text-sm text-zinc-700 leading-relaxed font-body">
+                        Para la réplica digital utilicé <strong>Photoshop</strong>, configurando un lienzo tamaño tabloide en modo CMYK a 300 DPI. Comencé trazando un esqueleto base calcando las proporciones de la obra original (con opacidad baja) para asegurar la ubicación exacta del puente y el personaje.
+                    </p>
+                    <p class="text-sm text-zinc-700 leading-relaxed font-body mt-3">
+                        Luego, utilicé pinceles de medios secos y el <em>Pincel Mezclador (Mixer Brush)</em> para replicar las ondas del cielo y las texturas del fiordo, aplicando manchas de color y difuminando para imitar el pastel original.
+                    </p>
+                </div>
+
+                <!-- Reseña Análoga -->
+                <div class="bg-zinc-50 border-2 border-munch-dark p-6 sm:p-8 hard-shadow-sm relative group hover:border-munch-orange transition-colors">
+                    <div class="tape absolute -top-3 right-8 w-24 h-5 -rotate-2"></div>
+                    <div class="flex items-center gap-3 mb-4 border-b border-zinc-200 pb-3">
+                        <i data-lucide="palette" class="w-6 h-6 text-munch-orange"></i>
+                        <h3 class="font-title text-2xl font-bold text-zinc-900">Proceso Análogo</h3>
+                    </div>
+                    <p class="text-sm text-zinc-700 leading-relaxed font-body">
+                        [INSTRUCCIÓN: Escribe aquí cómo fue tu proceso a mano]. La mayor dificultad al realizar la réplica a mano fue lograr la intensidad de los colores cálidos del cielo y mezclarlos correctamente sin perder la forma de las pinceladas. 
+                    </p>
+                    <p class="text-sm text-zinc-700 leading-relaxed font-body mt-3">
+                        Fue un reto interesante intentar reproducir la sensación de movimiento y distorsión que transmite la obra, obligándome a soltar el trazo para lograr esa estética expresionista.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Comparación Visual Final (Las 3 fotos) -->
+            <div class="space-y-6 pt-8">
+                <div class="text-center">
+                    <span class="bg-munch-dark text-white text-xs font-mono px-3 py-1 uppercase font-bold border border-munch-dark inline-block">Comparación Final</span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Original -->
+                    <div class="bg-white border-2 border-munch-dark p-3 hard-shadow-sm text-center group">
+                        <div class="aspect-[3/4] bg-zinc-200 border border-zinc-300 overflow-hidden mb-3">
+                            <img src="media/fotos/EL GRITO.jpg" alt="Obra Original" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <h4 class="font-bold text-sm text-zinc-900">Obra Original</h4>
+                        <p class="text-xs font-mono text-zinc-500">Munch, 1893</p>
+                    </div>
+
+                    <!-- Réplica Análoga -->
+                    <div class="bg-white border-2 border-munch-dark p-3 hard-shadow-sm text-center group rotate-[1deg]">
+                        <div class="aspect-[3/4] bg-zinc-200 border border-zinc-300 overflow-hidden mb-3">
+                            <img src="media/fotos/analoga.png" alt="Réplica Análoga" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <h4 class="font-bold text-sm text-zinc-900">Réplica Análoga</h4>
+                        <p class="text-xs font-mono text-zinc-500">Trabajo a mano</p>
+                    </div>
+
+                    <!-- Réplica Digital -->
+                    <div class="bg-white border-2 border-munch-dark p-3 hard-shadow-sm text-center group rotate-[-1deg]">
+                        <div class="aspect-[3/4] bg-zinc-200 border border-zinc-300 overflow-hidden mb-3">
+                            <img src="media/fotos/final grito.jpg" alt="Réplica Digital" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <h4 class="font-bold text-sm text-zinc-900">Réplica Digital</h4>
+                        <p class="text-xs font-mono text-zinc-500">Photoshop (CMYK, 300dpi)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Videos del Proceso -->
+            <div class="space-y-8 pt-12 border-t-2 border-zinc-200">
+                <div class="text-center">
+                    <span class="bg-munch-yellow text-black text-xs font-mono px-3 py-1 uppercase font-bold border border-munch-dark inline-block mb-2">Evidencia Audiovisual</span>
+                    <h3 class="font-display text-4xl text-zinc-900">REGISTRO DEL PROCESO EN VIDEO</h3>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 max-w-3xl mx-auto">
+                    <!-- Video 3 -->
+                    <div class="bg-zinc-900 border-2 border-munch-dark p-3 hard-shadow-sm">
+                        <div class="w-full aspect-video bg-black border border-zinc-700 overflow-hidden mb-2 relative">
+                            <video src="media/videos/proceso 3.mp4" controls class="w-full h-full object-cover">
+                                Tu navegador no soporta el formato de video.
+                            </video>
+                        </div>
+                        <div class="flex justify-between items-center text-xs font-mono text-zinc-400 px-1">
+                            <span class="text-munch-blue font-bold uppercase">CLIP 03</span>
+                            <span>Texturas y Detalles</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- GALERÍA / COLLAGE VISUAL -->
+    <section id="galeria" class="py-20 px-6 bg-zinc-100 border-t-2 border-munch-dark relative">
+        <div class="max-w-7xl mx-auto space-y-12">
+            
+            <div class="text-center max-w-3xl mx-auto relative">
+                <div class="tape absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-6 rotate-[-2deg] z-10"></div>
+                <span class="bg-munch-orange text-white font-mono text-xs uppercase px-2.5 py-1 border-2 border-munch-dark hard-shadow-sm inline-block font-bold">
+                    04. Archivo Visual
+                </span>
+                <h2 class="font-display text-4xl sm:text-7xl text-munch-dark mt-2">COLLAGE DE ADAPTACIONES</h2>
+                <p class="text-zinc-700 text-base font-medium mt-2">
+                    Muestra visual de cómo una misma imagen se transforma y adquiere múltiples significados según la época, técnica y el medio.
+                </p>
+            </div>
+
+            <!-- Grilla Asimétrica Brutalista -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 auto-rows-[200px]">
+                
+                <div class="bg-white border-2 border-munch-dark hard-shadow-sm p-2 flex flex-col items-center justify-center col-span-2 row-span-2 relative overflow-hidden group hover:scale-[1.02] transition-transform">
+                    <img src="media/fotos/5.jpg" alt="Versión 1" class="w-full h-full object-cover bg-zinc-200">
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/40 transition-colors">
+                        <span class="bg-white text-black font-mono text-xs px-2 py-1 font-bold opacity-0 group-hover:opacity-100 transition-opacity">[Imagen Meme/Pop]</span>
+                    </div>
+                </div>
+
+                <div class="bg-white border-2 border-munch-dark hard-shadow-sm p-2 flex flex-col items-center justify-center relative overflow-hidden group hover:scale-[1.02] transition-transform">
+                    <img src="media/fotos/1.jpg" alt="Versión 2" class="w-full h-full object-cover bg-zinc-200">
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/40 transition-colors">
+                        <span class="bg-white text-black font-mono text-xs px-2 py-1 font-bold opacity-0 group-hover:opacity-100 transition-opacity">[Ilustración]</span>
+                    </div>
+                </div>
+
+                <div class="bg-white border-2 border-munch-dark hard-shadow-sm p-2 flex flex-col items-center justify-center row-span-2 relative overflow-hidden group hover:scale-[1.02] transition-transform">
+                    <img src="media/fotos/9.jpg" alt="Versión 3" class="w-full h-full object-cover bg-zinc-200">
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/40 transition-colors">
+                        <span class="bg-white text-black font-mono text-xs px-2 py-1 font-bold opacity-0 group-hover:opacity-100 transition-opacity">[Publicidad]</span>
+                    </div>
+                </div>
+
+                <div class="bg-white border-2 border-munch-dark hard-shadow-sm p-2 flex flex-col items-center justify-center relative overflow-hidden group hover:scale-[1.02] transition-transform">
+                    <img src="media/fotos/8.jpg" alt="Versión 4" class="w-full h-full object-cover bg-zinc-200">
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/40 transition-colors">
+                        <span class="bg-white text-black font-mono text-xs px-2 py-1 font-bold opacity-0 group-hover:opacity-100 transition-opacity">[Mercancía/Moda]</span>
+                    </div>
+                </div>
+
+                <div class="bg-white border-2 border-munch-dark hard-shadow-sm p-2 flex flex-col items-center justify-center relative overflow-hidden group hover:scale-[1.02] transition-transform">
+                    <img src="media/fotos/10.jpg" alt="Versión 5" class="w-full h-full object-cover bg-zinc-200">
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/40 transition-colors">
+                        <span class="bg-white text-black font-mono text-xs px-2 py-1 font-bold opacity-0 group-hover:opacity-100 transition-opacity">[Arte Urbano]</span>
+                    </div>
+                </div>
+
+                <div class="bg-white border-2 border-munch-dark hard-shadow-sm p-2 flex flex-col items-center justify-center relative overflow-hidden group hover:scale-[1.02] transition-transform">
+                    <img src="media/fotos/11.jpg" alt="Versión 6" class="w-full h-full object-cover bg-zinc-200">
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/40 transition-colors">
+                        <span class="bg-white text-black font-mono text-xs px-2 py-1 font-bold opacity-0 group-hover:opacity-100 transition-opacity">[Versión Lego]</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SEPARADOR: SEGUNDO CORTE -->
+    <div id="segundo-corte" class="bg-munch-yellow border-t-2 border-b-2 border-munch-dark py-6 px-6 text-center">
+        <span class="font-mono text-xs font-bold uppercase tracking-widest">// Entrega Segundo Corte</span>
+        <h2 class="font-display text-4xl sm:text-6xl text-munch-dark">MASHUP VISUAL: EL OLIMPO MEDIÁTICO Y EL VIAJERO</h2>
+        <p class="font-title text-base sm:text-lg text-zinc-800 max-w-3xl mx-auto font-semibold">Reinterpretación contemporánea de la sátira sociopolítica colombiana a través del fotomontaje digital y la deconstrucción de la cultura de los memes.</p>
+    </div>
+
+    <!-- SECCIÓN 1: CONCEPTO -->
+    <section id="concepto" class="py-20 px-6 border-t-2 border-munch-dark bg-white relative">
+        <div class="max-w-7xl mx-auto space-y-12">
+            <div class="flex flex-col md:flex-row md:items-end justify-between border-b-2 border-munch-dark pb-6 gap-4">
+                <div>
+                    <span class="bg-munch-orange text-white font-mono text-xs uppercase px-2.5 py-1 border-2 border-munch-dark hard-shadow-sm inline-block font-bold">
+                        05. Segundo Corte · Concepto
+                    </span>
+                    <h2 class="font-display text-4xl sm:text-6xl text-munch-dark mt-2">CONCEPTO Y DISCURSO</h2>
+                </div>
+                <div class="font-hand text-3xl text-zinc-600 -rotate-2">
+                    "La política llevada al meme"
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div class="lg:col-span-8 bg-zinc-50 border-2 border-munch-dark p-6 sm:p-8 hard-shadow space-y-6">
+                    <h3 class="font-title text-2xl font-bold text-zinc-900">¿Qué propone el mashup y su nuevo contexto?</h3>
+                    <p class="text-sm sm:text-base text-zinc-700 leading-relaxed font-body">
+                        Esta pieza sitúa un paisaje clásico mediterráneo en un choque anacrónico directo con la polarización y la farandulización de la política nacional colombiana. Utiliza como eje central la figura viral de <strong>Miguel Polo Polo</strong> en su polémico viaje por el Mediterráneo, plasmando una expresión de absoluto desconcierto en primer plano.
+                    </p>
+                    <p class="text-sm sm:text-base text-zinc-700 leading-relaxed font-body">
+                        En segundo plano, figuras clave como <strong>Gustavo Petro e Iván Cepeda</strong> ascienden por las escaleras del paisaje, mientras que <strong>Abelardo de la Espriella</strong> se funde en la textura superior del cielo al estilo de un óleo expresionista, siendo elevado metafóricamente a una categoría casi mitológica u olímpica.
+                    </p>
+                    <div class="p-4 bg-munch-dark text-white border border-black font-mono text-xs">
+                        <span class="text-munch-yellow font-bold uppercase block mb-1">// Intención Crítica</span>
+                        Cuestionar cómo las narrativas de poder y los escándalos públicos se trivializan instantáneamente en la opinión pública digital, transformando a los actores políticos en personajes de un collage absurdo pero profundamente reconocible.
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4 bg-munch-yellow border-2 border-munch-dark p-6 hard-shadow-sm rotate-1 space-y-4">
+                    <span class="font-mono text-xs font-bold uppercase bg-black text-white px-2 py-0.5 inline-block">Criterios de Evaluación</span>
+                    <ul class="space-y-3 text-sm font-semibold text-zinc-900">
+                        <li class="flex justify-between border-b border-black/20 pb-2">
+                            <span>Resultado final</span>
+                            <span class="font-mono text-munch-red">50%</span>
+                        </li>
+                        <li class="flex justify-between border-b border-black/20 pb-2">
+                            <span>Proceso de creación</span>
+                            <span class="font-mono text-munch-red">25%</span>
+                        </li>
+                        <li class="flex justify-between border-b border-black/20 pb-2">
+                            <span>Concepto</span>
+                            <span class="font-mono text-munch-red">25%</span>
+                        </li>
+                        <li class="pt-2 text-xs font-mono text-zinc-800">
+                            * Más del 70% del trabajo corresponde a intervención, máscaras y montaje de autoría propia.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 2: PROCESO & VIDEO DE YOUTUBE -->
+    <section id="proceso" class="py-20 px-6 border-t-2 border-munch-dark bg-munch-dark text-white relative">
+        <div class="max-w-7xl mx-auto space-y-16">
+            <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-zinc-700 pb-6 gap-4">
+                <div>
+                    <span class="bg-munch-yellow text-black font-mono text-xs uppercase px-2.5 py-1 border border-black font-bold">
+                        06. Segundo Corte · Proceso
+                    </span>
+                    <h2 class="font-display text-4xl sm:text-7xl text-white mt-2">PROCESO DE CREACIÓN Y VIDEO</h2>
+                </div>
+                <p class="text-zinc-400 text-sm font-mono max-w-sm">
+                    Demostración detallada de la evolución técnica, decisiones de diseño y montaje en Photoshop.
+                </p>
+            </div>
+
+            <!-- CONTENEDOR DEL VIDEO DE YOUTUBE INTEGRADO -->
+            <div class="bg-zinc-900 border-2 border-zinc-700 p-6 sm:p-8 hard-shadow-orange space-y-6">
+                <div class="flex items-center justify-between border-b border-zinc-800 pb-4">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="circle-play" class="w-6 h-6 text-munch-orange"></i>
+                        <h3 class="font-title text-2xl font-bold uppercase text-white">Video de Evidencia (YouTube)</h3>
+                    </div>
+                    <span class="bg-munch-orange text-white text-xs font-mono px-2.5 py-1 font-bold uppercase">Registro audiovisual</span>
+                </div>
+
+                <p class="text-sm text-zinc-300 font-body">
+                    A continuación se presenta el registro en video del paso a paso del desarrollo, los recortes, la integración de capas y la estructuración del mashup visual:
+                </p>
+
+                <div class="w-full aspect-video bg-black border-2 border-zinc-700 relative overflow-hidden">
+                    <iframe 
+                        class="w-full h-full" 
+                        src="https://www.youtube.com/embed/0fP8sbEZyX0" 
+                        title="Video de Proceso - Mashup Visual" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 3: EVIDENCIAS (DOS IMÁGENES) Y PRODUCTO FINAL -->
+    <section id="evidencias" class="py-20 px-6 border-t-2 border-munch-dark bg-white relative">
+        <div class="max-w-7xl mx-auto space-y-16">
+            <div class="flex flex-col md:flex-row md:items-end justify-between border-b-2 border-munch-dark pb-6 gap-4">
+                <div>
+                    <span class="bg-munch-red text-white font-mono text-xs uppercase px-2.5 py-1 border-2 border-munch-dark hard-shadow-sm inline-block font-bold">
+                        07. Segundo Corte · Resultado
+                    </span>
+                    <h2 class="font-display text-4xl sm:text-6xl text-munch-dark mt-2">EVIDENCIAS Y RESULTADO FINAL</h2>
+                </div>
+            </div>
+
+            <!-- Dos imágenes de evidencias -->
+            <div class="space-y-6">
+                <div class="border-l-4 border-munch-orange pl-4">
+                    <h3 class="font-title text-2xl font-bold text-zinc-900">Evidencias del Proceso de Creación</h3>
+                    <p class="text-xs font-mono text-zinc-600 mt-0.5">Pruebas de composición, máscaras de capa e integración cromática (Evidencia 1 y 2).</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- EVIDENCIA 01 -->
+                    <div class="bg-zinc-50 border-2 border-munch-dark p-4 hard-shadow-sm space-y-3">
+                        <div class="aspect-[4/3] bg-zinc-200 border border-zinc-300 overflow-hidden flex items-center justify-center relative">
+                            <!-- CAMBIA 'ruta_de_tu_imagen_1.jpg' POR EL NOMBRE DE TU FOTO DE EVIDENCIA 1 -->
+                            <img src="media/fotos/1.png" alt="Evidencia 1" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex justify-between items-center pt-2 border-t border-zinc-200 font-mono text-xs">
+                            <span class="font-bold text-munch-orange">EVIDENCIA 01</span>
+                            <span class="text-zinc-500">Calados y Recortes</span>
+                        </div>
+                    </div>
+
+                    <!-- EVIDENCIA 02 -->
+                    <div class="bg-zinc-50 border-2 border-munch-dark p-4 hard-shadow-sm space-y-3">
+                        <div class="aspect-[4/3] bg-zinc-200 border border-zinc-300 overflow-hidden flex items-center justify-center relative">
+                            <!-- CAMBIA 'ruta_de_tu_imagen_2.jpg' POR EL NOMBRE DE TU FOTO DE EVIDENCIA 2 -->
+                            <img src="media/fotos/2.png" alt="Evidencia 2" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex justify-between items-center pt-2 border-t border-zinc-200 font-mono text-xs">
+                            <span class="font-bold text-munch-blue">EVIDENCIA 02</span>
+                            <span class="text-zinc-500">Pruebas Cromáticas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESULTADO FINAL DEL MASHUP -->
+            <div id="resultado" class="space-y-6 pt-12 border-t-2 border-zinc-200">
+                <div class="border-l-4 border-munch-yellow pl-4">
+                    <h3 class="font-title text-2xl font-bold text-zinc-900">Resultado Final — Pieza Mashup</h3>
+                    <p class="text-xs font-mono text-zinc-600 mt-0.5">Composición gráfica digital consolidada (más del 70% de intervención propia).</p>
+                </div>
+
+                <div class="bg-munch-dark border-2 border-munch-dark p-6 sm:p-8 hard-shadow-lg grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-6">
+                        <div class="aspect-[3/4] bg-black border-2 border-munch-orange overflow-hidden flex items-center justify-center relative">
+                            <!-- CAMBIA 'tu_imagen_resultado_final.jpg' POR EL NOMBRE DE TU FOTO FINAL -->
+                            <img src="media/fotos/Sátira geo-política.jpg" alt="Resultado Final" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="lg:col-span-6 space-y-6 text-white">
+                        <span class="bg-munch-orange text-white font-mono text-xs uppercase px-2.5 py-1 font-bold inline-block">Pieza Consolidada</span>
+                        <h4 class="font-display text-4xl text-munch-yellow uppercase">Sátira Geopolítica en el Mediterráneo</h4>
+                        <p class="text-sm text-zinc-300 font-body leading-relaxed">
+                            La pieza final integra armónicamente todos los elementos satíricos en una sola narrativa visual coherente. El tratamiento digital de luces, sombras y texturas garantiza que los personajes cohabiten el espacio escénico con una lectura crítica aguda e impecable.
+                        </p>
+                        <ul class="space-y-2 text-xs font-mono text-zinc-300">
+                            <li class="flex items-center gap-2">✓ Formato digital optimizado</li>
+                            <li class="flex items-center gap-2">✓ Reconocimiento absoluto de la obra de base y los sujetos satíricos</li>
+                            <li class="flex items-center gap-2">✓ Cumplimiento total de los criterios de autoría</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- FOOTER -->
+    <footer class="bg-munch-dark text-white py-12 px-6 border-t-4 border-munch-orange relative overflow-hidden">
+        <!-- Mancha de fondo en el footer -->
+        <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-munch-blue blob-2 opacity-30 z-0"></div>
+        
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono relative z-10">
+            <div>
+                <p class="font-bold text-sm text-munch-orange font-display tracking-wider">INVESTIGACIÓN DE REINTERPRETACIONES VISUALES</p>
+                <p class="text-zinc-400 mt-1">El Grito (Skrik) - Edvard Munch // Entrega Segundo Corte: Mashup Visual</p>
+            </div>
+            <div class="text-center md:text-right text-zinc-400 bg-black/40 p-3 border border-zinc-700">
+                <p class="font-bold text-white">Presentado por:</p>
+                <p class="text-munch-yellow text-sm font-bold mt-0.5">Jhon Cubillos</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVIDAD JS: SEGUIDOR, OJOS & PARALLAX -->
+    <script>
+        // Inicializar iconos
+        lucide.createIcons();
+
+        // 1. Cursor follower interactivo
+        const cursorFollower = document.getElementById('cursorFollower');
+        
+        // 2. Ojos interactivos
+        const allInteractiveEyes = document.querySelectorAll('.interactive-eye');
+        
+        // 3. Badges Parallax
+        const parallaxBadges = document.querySelectorAll('.parallax-badge');
+
+        window.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+
+            // Movimiento del cursor emoji
+            if (cursorFollower) {
+                cursorFollower.style.left = `${mouseX}px`;
+                cursorFollower.style.top = `${mouseY}px`;
+            }
+
+            // Ojos siguiendo el cursor
+            allInteractiveEyes.forEach(eye => {
+                const pupil = eye.querySelector('.iris-pupil');
+                if (!pupil) return;
+
+                const rect = eye.getBoundingClientRect();
+                const eyeX = rect.left + rect.width / 2;
+                const eyeY = rect.top + rect.height / 2;
+
+                const deltaX = mouseX - eyeX;
+                const deltaY = mouseY - eyeY;
+                const angle = Math.atan2(deltaY, deltaX);
+
+                const maxDist = parseFloat(eye.dataset.maxDist) || 16;
+                const distance = Math.min(maxDist, Math.hypot(deltaX, deltaY) / 12);
+
+                const moveX = Math.cos(angle) * distance;
+                const moveY = Math.sin(angle) * distance;
+
+                pupil.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+
+            // Elementos Parallax
+            parallaxBadges.forEach(badge => {
+                const speed = parseFloat(badge.getAttribute('data-speed')) || 1;
+                const x = (window.innerWidth - mouseX * speed) / 90;
+                const y = (window.innerHeight - mouseY * speed) / 90;
+                badge.style.transform = `translate(${x}px, ${y}px) rotate(${speed > 0 ? -6 : 6}deg)`;
+            });
+        });
+    </script>
+</body>
+</html>
